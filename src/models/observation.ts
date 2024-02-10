@@ -1,13 +1,23 @@
-import mongoose, { Schema } from "mongoose";
-Schema: mongoose.Schema;
+import { Schema, model } from "mongoose";
 
-const ObservationSchema = new Schema({
-  user: String,
-  location: String,
-  feelsLike: String,
+interface IObservation {
+  user: string;
+  location: string;
+  feelsLike: string;
+  content: string;
+  comments: [string];
+  photo: string;
+}
+
+const ObservationSchema = new Schema<IObservation>({
+  user: { type: String, required: true },
+  location: { type: String, required: true },
+  feelsLike: { type: String, required: true },
   content: String,
   comments: [String],
   photo: String,
 });
 
-export default mongoose.model("Observation", ObservationSchema);
+const Observation = model<IObservation>("Observation", ObservationSchema);
+
+export default Observation;
