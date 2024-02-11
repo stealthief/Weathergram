@@ -1,0 +1,13 @@
+<%- include('../partials/header') %>
+<h1>Observations Page</h1>
+<a href="/observations/new"><h2>New Observation</h2></a>
+<ul>
+  <% for (let obs of observations) { %>
+  <li>
+    <a href="/observations/<%= obs._id %>">
+      <%= obs.user %> is feeling <%= obs.feelsLike %> in <%= obs.location %>
+    </a>
+  </li>
+  <% } %>
+</ul>
+<%- include('../partials/footer') %>
