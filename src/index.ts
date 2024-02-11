@@ -97,7 +97,7 @@ app.delete("/observations/:id", async (req: Request, res: Response) => {
 /**
  * 404 Not Found
  */
-app.use((req: Request, res: Response, next) => {
+app.use((req: Request, res: Response) => {
   res.status(404).render("404");
 });
 
