@@ -1,0 +1,18 @@
+<% layout('layouts/boilerplate') %>
+<h1>New Observation</h1>
+<form action="/observations" method="POST">
+  <div>
+    <label for="user">User</label>
+    <input type="text" id="user" name="observation[user]" required />
+  </div>
+  <div>
+    <label for="location">Location</label>
+    <input type="text" id="location" name="observation[location]" required />
+  </div>
+  <div>
+    <label for="feelsLike">Feels Like</label>
+    <input type="text" id="feelsLike" name="observation[feelsLike]" required />
+  </div>
+  <button>Add Observation</button>
+</form>
+<a href="/observations">Cancel</a>

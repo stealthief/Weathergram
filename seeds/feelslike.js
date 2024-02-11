@@ -1,0 +1,18 @@
+module.exports = [
+  "hot",
+  "cold",
+  "windy",
+  "freezing",
+  "rainy",
+  "sleeting",
+  "humid",
+  "uncomfortable",
+  "mild",
+  "moderate",
+  "chilly",
+  "sweltering",
+  "scorching",
+  "breezy",
+  "cyclonic",
+  "calm",
+];

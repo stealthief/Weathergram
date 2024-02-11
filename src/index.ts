@@ -2,7 +2,10 @@ import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
 import path from "path";
 import mongoose from "mongoose";
-import Observation from "./models/observation";
+// @ts-ignore
+import ejsEngine from "ejs-mate";
+import methodOverride from "method-override";
+import { Observation } from "./models/observation";
 
 dotenv.config();
 
@@ -17,22 +20,88 @@ db.once("open", () => {
 const app: Express = express();
 const port = process.env.PORT || 3000;
 
+app.engine("ejs", ejsEngine);
 app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "../views"));
+app.set("views", path.join(__dirname, "../src/views"));
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(methodOverride("_method"));
 
+/**
+ * Home page route
+ */
 app.get("/", (req: Request, res: Response) => {
   res.render("test");
 });
 
-app.get("/newobservation", async (req: Request, res: Response) => {
-  const obs = new Observation({
-    user: "Josh",
-    location: "Canberra",
-    feelslike: "Mild",
-    content: "A nice summer's day!",
-  });
-  await obs.save();
-  res.send(obs);
+/**
+ * View all observations
+ */
+app.get("/observations", async (req: Request, res: Response) => {
+  const observations = await Observation.find({});
+  res.render("observations/index", { observations });
+});
+
+/**
+ * Create an observation
+ */
+app.get("/observations/new", (req: Request, res: Response) => {
+  res.render("observations/new");
+});
+
+app.post("/observations", async (req: Request, res: Response) => {
+  const observation = Observation.build(req.body.observation);
+  try {
+    await observation.save();
+  } catch (err) {
+    console.log(`Error: ${err}`);
+  }
+  res.redirect(`/observations/${observation._id}`);
+});
+
+/**
+ * View observation details
+ */
+app.get("/observations/:id", async (req: Request, res: Response) => {
+  const observation = await Observation.findById(req.params.id);
+  res.render("observations/details", { observation });
+});
+
+/**
+ * Edit observation
+ */
+app.get("/observations/:id/edit", async (req: Request, res: Response) => {
+  const observation = await Observation.findById(req.params.id);
+  res.render("observations/edit", { observation });
+});
+
+app.patch("/observations/:id", async (req: Request, res: Response) => {
+  try {
+    const observation = await Observation.findByIdAndUpdate(
+      req.params.id,
+      req.body.observation,
+      { new: true }
+    );
+    res.redirect(`/observations/${observation?._id}`);
+  } catch (err) {
+    console.log(`Error: ${err}`);
+  }
+});
+
+/**
+ * Delete Observation
+ */
+app.delete("/observations/:id", async (req: Request, res: Response) => {
+  const { id } = req.params;
+  await Observation.findByIdAndDelete(id);
+  res.redirect("/observations");
+});
+
+/**
+ * 404 Not Found
+ */
+app.use((req: Request, res: Response) => {
+  res.status(404).render("404");
 });
 
 app.listen(port, () => {
