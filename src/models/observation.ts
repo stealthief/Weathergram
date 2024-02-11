@@ -1,15 +1,19 @@
-import { Schema, model } from "mongoose";
+import mongoose, { Model, Schema, model } from "mongoose";
 
 interface IObservation {
   user: string;
   location: string;
   feelsLike: string;
-  content: string;
-  comments: [string];
-  photo: string;
+  content?: string;
+  comments?: [string];
+  photo?: string;
 }
 
-const ObservationSchema = new Schema<IObservation>({
+interface ObservationModel extends Model<IObservation> {
+  build(attr: IObservation): any;
+}
+
+const ObservationSchema = new Schema<IObservation, ObservationModel>({
   user: { type: String, required: true },
   location: { type: String, required: true },
   feelsLike: { type: String, required: true },
@@ -18,6 +22,13 @@ const ObservationSchema = new Schema<IObservation>({
   photo: String,
 });
 
-const Observation = model<IObservation>("Observation", ObservationSchema);
+ObservationSchema.static("build", function build(obs: IObservation) {
+  return new Observation(obs);
+});
 
-export default Observation;
+const Observation = model<IObservation, ObservationModel>(
+  "Observation",
+  ObservationSchema
+);
+
+export { Observation };
