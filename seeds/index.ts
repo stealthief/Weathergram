@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import Observation from "../src/models/observation";
+import { Observation } from "../src/models/observation";
 const suburbs = require("./suburbs");
 const feel = require("./feelslike");
 const names = require("./names");

@@ -16,7 +16,8 @@ const express_1 = __importDefault(require("express"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const path_1 = __importDefault(require("path"));
 const mongoose_1 = __importDefault(require("mongoose"));
-const observation_1 = __importDefault(require("./models/observation"));
+const method_override_1 = __importDefault(require("method-override"));
+const observation_1 = require("./models/observation");
 dotenv_1.default.config();
 mongoose_1.default.connect("mongodb://localhost:27017/weather-gram");
 const db = mongoose_1.default.connection;
@@ -27,19 +28,71 @@ db.once("open", () => {
 const app = (0, express_1.default)();
 const port = process.env.PORT || 3000;
 app.set("view engine", "ejs");
-app.set("views", path_1.default.join(__dirname, "../views"));
+app.set("views", path_1.default.join(__dirname, "../src/views"));
+app.use(express_1.default.urlencoded({ extended: true }));
+app.use(express_1.default.json());
+app.use((0, method_override_1.default)("_method"));
+/**
+ * Home page route
+ */
 app.get("/", (req, res) => {
     res.render("test");
 });
-app.get("/newobservation", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const obs = new observation_1.default({
-        user: "Josh",
-        location: "Canberra",
-        feelslike: "Mild",
-        content: "A nice summer's day!",
-    });
-    yield obs.save();
-    res.send(obs);
+/**
+ * View all observations
+ */
+app.get("/observations", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const observations = yield observation_1.Observation.find({});
+    res.render("observations/index", { observations });
+}));
+/**
+ * Create an observation
+ */
+app.get("/observations/new", (req, res) => {
+    res.render("observations/new");
+});
+app.post("/observations", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const observation = observation_1.Observation.build(req.body.observation);
+    try {
+        yield observation.save();
+    }
+    catch (err) {
+        console.log(`Error: ${err}`);
+    }
+    res.redirect(`/observations/${observation._id}`);
+}));
+/**
+ * View observation details
+ */
+app.get("/observations/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const observation = yield observation_1.Observation.findById(req.params.id);
+    res.render("observations/details", { observation });
+}));
+/**
+ * Edit observation
+ */
+app.get("/observations/:id/edit", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const observation = yield observation_1.Observation.findById(req.params.id);
+    res.render("observations/edit", { observation });
+}));
+app.patch("/observations/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const observation = yield observation_1.Observation.findByIdAndUpdate(req.params.id, req.body.observation, { new: true });
+        observation
+            ? res.redirect(`/observations/${observation._id}`)
+            : res.redirect("/observations");
+    }
+    catch (err) {
+        console.log(`Error: ${err}`);
+    }
+}));
+/**
+ * Delete Observation
+ */
+app.delete("/observations/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    yield observation_1.Observation.findByIdAndDelete(id);
+    res.redirect("/observations");
 }));
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
