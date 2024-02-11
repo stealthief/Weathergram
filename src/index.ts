@@ -79,9 +79,7 @@ app.patch("/observations/:id", async (req: Request, res: Response) => {
       req.body.observation,
       { new: true }
     );
-    observation
-      ? res.redirect(`/observations/${observation._id}`)
-      : res.redirect("/observations");
+    res.redirect(`/observations/${observation?._id}`);
   } catch (err) {
     console.log(`Error: ${err}`);
   }
@@ -94,6 +92,13 @@ app.delete("/observations/:id", async (req: Request, res: Response) => {
   const { id } = req.params;
   await Observation.findByIdAndDelete(id);
   res.redirect("/observations");
+});
+
+/**
+ * 404 Not Found
+ */
+app.use((req: Request, res: Response, next) => {
+  res.status(404).render("404");
 });
 
 app.listen(port, () => {
