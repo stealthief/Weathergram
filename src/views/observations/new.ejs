@@ -1,4 +1,4 @@
-<%- include('../partials/header') %>
+<% layout('layouts/boilerplate') %>
 <h1>New Observation</h1>
 <form action="/observations" method="POST">
   <div>
@@ -15,4 +15,4 @@
   </div>
   <button>Add Observation</button>
 </form>
-<%- include('../partials/footer') %>
+<a href="/observations">Cancel</a>

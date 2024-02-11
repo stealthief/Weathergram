@@ -1,4 +1,4 @@
-<%- include('../partials/header') %>
+<% layout('layouts/boilerplate') %>
 <h1>Observation Details</h1>
 <h2><%= observation.location %></h2>
 <p>User: <%= observation.user %></p>
@@ -11,4 +11,3 @@
   <button>Delete</button>
 </form>
 <a href="/observations">All Observations</a>
-<%- include('../partials/footer') %>

@@ -2,6 +2,8 @@ import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
 import path from "path";
 import mongoose from "mongoose";
+// @ts-ignore
+import ejsEngine from "ejs-mate";
 import methodOverride from "method-override";
 import { Observation } from "./models/observation";
 
@@ -18,6 +20,7 @@ db.once("open", () => {
 const app: Express = express();
 const port = process.env.PORT || 3000;
 
+app.engine("ejs", ejsEngine);
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "../src/views"));
 app.use(express.urlencoded({ extended: true }));

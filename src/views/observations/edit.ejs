@@ -1,4 +1,4 @@
-<%- include('../partials/header') %>
+<% layout('layouts/boilerplate') %>
 <h1>Edit Observation</h1>
 <form action="/observations/<%= observation._id %>?_method=PATCH" method="POST">
   <div>
@@ -34,4 +34,3 @@
   <button>Update</button>
 </form>
 <a href="/observations/<%= observation._id %>">Cancel</a>
-<%- include('../partials/footer') %>
