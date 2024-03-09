@@ -26,12 +26,13 @@ app.set("views", path.join(__dirname, "../src/views"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(methodOverride("_method"));
+//app.use(express.static(path.join(__dirname, "./dist")));
 
 /**
  * Home page route
  */
 app.get("/", (req: Request, res: Response) => {
-  res.render("test");
+  res.render("index");
 });
 
 /**

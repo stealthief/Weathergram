@@ -16,6 +16,8 @@ const express_1 = __importDefault(require("express"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const path_1 = __importDefault(require("path"));
 const mongoose_1 = __importDefault(require("mongoose"));
+// @ts-ignore
+const ejs_mate_1 = __importDefault(require("ejs-mate"));
 const method_override_1 = __importDefault(require("method-override"));
 const observation_1 = require("./models/observation");
 dotenv_1.default.config();
@@ -27,11 +29,13 @@ db.once("open", () => {
 });
 const app = (0, express_1.default)();
 const port = process.env.PORT || 3000;
+app.engine("ejs", ejs_mate_1.default);
 app.set("view engine", "ejs");
 app.set("views", path_1.default.join(__dirname, "../src/views"));
 app.use(express_1.default.urlencoded({ extended: true }));
 app.use(express_1.default.json());
 app.use((0, method_override_1.default)("_method"));
+app.use(express_1.default.static(path_1.default.join(__dirname, "dist")));
 /**
  * Home page route
  */
@@ -78,9 +82,7 @@ app.get("/observations/:id/edit", (req, res) => __awaiter(void 0, void 0, void 0
 app.patch("/observations/:id", (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const observation = yield observation_1.Observation.findByIdAndUpdate(req.params.id, req.body.observation, { new: true });
-        observation
-            ? res.redirect(`/observations/${observation._id}`)
-            : res.redirect("/observations");
+        res.redirect(`/observations/${observation === null || observation === void 0 ? void 0 : observation._id}`);
     }
     catch (err) {
         console.log(`Error: ${err}`);
@@ -94,6 +96,12 @@ app.delete("/observations/:id", (req, res) => __awaiter(void 0, void 0, void 0, 
     yield observation_1.Observation.findByIdAndDelete(id);
     res.redirect("/observations");
 }));
+/**
+ * 404 Not Found
+ */
+app.use((req, res) => {
+    res.status(404).render("404");
+});
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
 });
