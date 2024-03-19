@@ -68,6 +68,8 @@ var seedDB = function () { return __awaiter(void 0, void 0, void 0, function () 
                     user: "".concat(names[nIdx]),
                     location: "".concat(suburbs[sIdx].suburb, ", ").concat(suburbs[sIdx].state),
                     feelsLike: "".concat(feel[fIdx]),
+                    photo: 'https://source.unsplash.com/collection/893395',
+                    content: 'Wow, look at the weather here!',
                 });
                 return [4 /*yield*/, obs.save()];
             case 3:

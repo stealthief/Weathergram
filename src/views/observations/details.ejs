@@ -1,13 +1,35 @@
 <% layout('layouts/boilerplate') %>
-<h1>Observation Details</h1>
-<h2><%= observation.location %></h2>
-<p>User: <%= observation.user %></p>
-<p>Feels: <%= observation.feelsLike %></p>
-<a href="/observations/<%= observation._id %>/edit">Edit</a>
-<form
-  action="/observations/<%= observation._id %>?_method=DELETE"
-  method="POST"
->
-  <button>Delete</button>
-</form>
-<a href="/observations">All Observations</a>
+<div class="row">
+  <div class="col-6 offset-3">
+    <div class="card mb-3">
+      <img src="<%= observation.photo %>" alt="" class="card-img-top" />
+      <div class="card-body">
+        <h5 class="card-title"><%= observation.location %></h5>
+        <p class="card-text"><%= observation.content%></p>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item text-muted"><%= observation.user %></li>
+          <li class="list-group-item text-muted">
+            Feeling <%= observation.feelsLike %>
+          </li>
+        </ul>
+        <div class="card-body">
+          <a
+            href="/observations/<%= observation._id %>/edit"
+            class="card-link btn btn-warning"
+            >Edit</a
+          >
+          <form
+            action="/observations/<%= observation._id %>?_method=DELETE"
+            method="POST"
+            class="d-inline"
+          >
+            <button class="btn btn-danger">Delete</button>
+          </form>
+        </div>
+      </div>
+      <div class="card-footer">
+        <a href="/observations">All Observations</a>
+      </div>
+    </div>
+  </div>
+</div>

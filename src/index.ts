@@ -2,6 +2,7 @@ import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
 import path from "path";
 import mongoose from "mongoose";
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import ejsEngine from "ejs-mate";
 import methodOverride from "method-override";

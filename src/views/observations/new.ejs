@@ -1,18 +1,63 @@
 <% layout('layouts/boilerplate') %>
-<h1>New Observation</h1>
-<form action="/observations" method="POST">
-  <div>
-    <label for="user">User</label>
-    <input type="text" id="user" name="observation[user]" required />
+<div class="row">
+  <h1 class="text-center">New Observation</h1>
+  <div class="col-6 offset-3">
+    <form action="/observations" method="POST">
+      <div class="mb-3">
+        <label class="form-label" for="user">User</label>
+        <input
+          class="form-control"
+          type="text"
+          id="user"
+          name="observation[user]"
+          required
+        />
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="location">Location</label>
+        <input
+          class="form-control"
+          type="text"
+          id="location"
+          name="observation[location]"
+          required
+        />
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="feelsLike">Feels Like</label>
+        <input
+          class="form-control"
+          type="text"
+          id="feelsLike"
+          name="observation[feelsLike]"
+          required
+        />
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="feelsLike">Photo URL</label>
+        <input
+          class="form-control"
+          type="text"
+          id="photo"
+          name="observation[photo]"
+          required
+        />
+      </div>
+      <div class="mb-3">
+        <label class="form-label" for="feelsLike">Observation</label>
+        <textarea
+          class="form-control"
+          type="text"
+          id="content"
+          name="observation[content]"
+          required
+        >
+        </textarea>
+      </div>
+      <div class="mb-3">
+        <button class="btn btn-success">Add Observation</button>
+      </div>
+    </form>
+    <a href="/observations">Cancel</a>
   </div>
-  <div>
-    <label for="location">Location</label>
-    <input type="text" id="location" name="observation[location]" required />
-  </div>
-  <div>
-    <label for="feelsLike">Feels Like</label>
-    <input type="text" id="feelsLike" name="observation[feelsLike]" required />
-  </div>
-  <button>Add Observation</button>
-</form>
-<a href="/observations">Cancel</a>
+</div>

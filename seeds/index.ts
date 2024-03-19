@@ -26,6 +26,8 @@ const seedDB = async () => {
       user: `${names[nIdx]}`,
       location: `${suburbs[sIdx].suburb}, ${suburbs[sIdx].state}`,
       feelsLike: `${feel[fIdx]}`,
+      photo: 'https://source.unsplash.com/collection/893395',
+      content: 'Wow, look at the weather here!',
     });
     await obs.save();
   }
